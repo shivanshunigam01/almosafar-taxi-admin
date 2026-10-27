@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { formatMoney, type FareConfiguration } from "@almosafar/shared";
 import { useAdminData } from "../../context/AdminDataContext";
 import { useAdminLocale } from "../../context/AdminLocaleContext";
+import { useToast } from "../../components/ui/Toast";
 
 export default function FaresPage() {
   const { admin } = useAdminData();
   const { t, moneyLocale } = useAdminLocale();
+  const { toast } = useToast();
   const [rows, setRows] = useState<FareConfiguration[]>([]);
   const [editing, setEditing] = useState<FareConfiguration | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -36,8 +38,11 @@ export default function FaresPage() {
       });
       setEditing(null);
       load();
+      toast({ variant: "success", title: t("save"), description: "Fare configuration updated." });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Save failed");
+      const msg = e instanceof Error ? e.message : "Save failed";
+      setError(msg);
+      toast({ variant: "error", title: "Save failed", description: msg });
     }
   };
 
@@ -47,6 +52,7 @@ export default function FaresPage() {
       <p className="muted">{t("demoDisclaimer")}</p>
       {error ? <p className="error-text">{error}</p> : null}
       <section className="card">
+        <div className="table-scroll">
         <table>
           <thead>
             <tr>
@@ -77,6 +83,7 @@ export default function FaresPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </section>
       {editing ? (
         <section className="card">

@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import type { Driver } from "@almosafar/shared";
 import { useAdminData } from "../../context/AdminDataContext";
 import { useAdminLocale } from "../../context/AdminLocaleContext";
+import { useToast } from "../../components/ui/Toast";
 
 export default function DriversPage() {
   const { admin } = useAdminData();
   const { t } = useAdminLocale();
+  const { toast } = useToast();
   const [rows, setRows] = useState<Driver[]>([]);
   const [busy, setBusy] = useState<string | null>(null);
 
@@ -23,12 +25,18 @@ export default function DriversPage() {
     await admin.setDriverVerification(id, status);
     await load();
     setBusy(null);
+    toast({
+      variant: status === "verified" ? "success" : "warning",
+      title: status === "verified" ? t("verify") : t("reject"),
+      description: "Driver verification updated.",
+    });
   };
 
   return (
     <>
       <h1>{t("nav.drivers")}</h1>
       <section className="card">
+        <div className="table-scroll">
         <table>
           <thead>
             <tr>
@@ -36,7 +44,7 @@ export default function DriversPage() {
               <th>Online</th>
               <th>Verification</th>
               <th>License</th>
-              <th>Actions</th>
+              <th className="col-actions">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -46,28 +54,31 @@ export default function DriversPage() {
                 <td>{d.isOnline ? "Yes" : "No"}</td>
                 <td>{d.verificationStatus ?? "—"}</td>
                 <td>{d.licenseNumber ?? "—"}</td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn secondary"
-                    disabled={busy === d.id}
-                    onClick={() => verify(d.id, "verified")}
-                  >
-                    {t("verify")}
-                  </button>{" "}
-                  <button
-                    type="button"
-                    className="btn danger"
-                    disabled={busy === d.id}
-                    onClick={() => verify(d.id, "rejected")}
-                  >
-                    {t("reject")}
-                  </button>
+                <td className="col-actions">
+                  <div className="btn-row">
+                    <button
+                      type="button"
+                      className="btn secondary sm"
+                      disabled={busy === d.id}
+                      onClick={() => verify(d.id, "verified")}
+                    >
+                      {t("verify")}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn danger sm"
+                      disabled={busy === d.id}
+                      onClick={() => verify(d.id, "rejected")}
+                    >
+                      {t("reject")}
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        </div>
       </section>
     </>
   );

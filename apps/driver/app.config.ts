@@ -1,5 +1,11 @@
 import type { ExpoConfig } from "expo/config";
 
+/** EAS project @shivanshunigam/almosafar-taxi-driver */
+const easProjectId =
+  process.env.EAS_PROJECT_ID_DRIVER ??
+  process.env.EXPO_PUBLIC_EAS_PROJECT_ID ??
+  "6ecf4787-78a3-466c-bda1-57c7f09f2062";
+
 const config: ExpoConfig = {
   name: "Almosafar Driver (Demo)",
   slug: "almosafar-taxi-driver",
@@ -21,10 +27,7 @@ const config: ExpoConfig = {
   },
   extra: {
     eas: {
-      projectId:
-        process.env.EAS_PROJECT_ID_DRIVER ??
-        process.env.EXPO_PUBLIC_EAS_PROJECT_ID ??
-        "REPLACE_WITH_EAS_PROJECT_ID_DRIVER",
+      projectId: easProjectId,
     },
   },
 };

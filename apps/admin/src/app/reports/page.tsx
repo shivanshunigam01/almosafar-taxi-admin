@@ -2,10 +2,12 @@
 
 import { useAdminData } from "../../context/AdminDataContext";
 import { useAdminLocale } from "../../context/AdminLocaleContext";
+import { useToast } from "../../components/ui/Toast";
 
 export default function ReportsPage() {
   const { admin } = useAdminData();
   const { t } = useAdminLocale();
+  const { toast } = useToast();
 
   const download = async () => {
     if (!admin) return;
@@ -17,6 +19,11 @@ export default function ReportsPage() {
     a.download = `almosafar-rides-${Date.now()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
+    toast({
+      variant: "success",
+      title: t("exportCsv"),
+      description: "Ride report downloaded.",
+    });
   };
 
   return (

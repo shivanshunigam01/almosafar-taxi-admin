@@ -4,6 +4,12 @@ const demoMode =
   process.env.EXPO_PUBLIC_ALMOSAFAR_DEMO_MODE !== "false" &&
   process.env.ALMOSAFAR_DEMO_MODE !== "false";
 
+/** EAS project @shivanshunigam/almosafar-taxi-passenger */
+const easProjectId =
+  process.env.EAS_PROJECT_ID_PASSENGER ??
+  process.env.EXPO_PUBLIC_EAS_PROJECT_ID ??
+  "92a49a5b-e838-4d30-94a6-064a0b57b885";
+
 const config: ExpoConfig = {
   name: demoMode ? "Almosafar Taxi (Demo)" : "Almosafar Taxi",
   slug: "almosafar-taxi-passenger",
@@ -28,10 +34,7 @@ const config: ExpoConfig = {
     almosafarDemoMode: demoMode,
     googleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
     eas: {
-      projectId:
-        process.env.EAS_PROJECT_ID_PASSENGER ??
-        process.env.EXPO_PUBLIC_EAS_PROJECT_ID ??
-        "REPLACE_WITH_EAS_PROJECT_ID_PASSENGER",
+      projectId: easProjectId,
     },
   },
 };

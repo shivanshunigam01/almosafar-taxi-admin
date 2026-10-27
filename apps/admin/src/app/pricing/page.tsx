@@ -5,10 +5,12 @@ import type { OperationalSettings } from "@almosafar/shared";
 import { formatMoney } from "@almosafar/shared";
 import { useAdminData } from "../../context/AdminDataContext";
 import { useAdminLocale } from "../../context/AdminLocaleContext";
+import { useToast } from "../../components/ui/Toast";
 
 export default function PricingRulesPage() {
   const { admin } = useAdminData();
   const { t, moneyLocale } = useAdminLocale();
+  const { toast } = useToast();
   const [ops, setOps] = useState<OperationalSettings | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,8 +31,11 @@ export default function PricingRulesPage() {
         surgeRules: ops.surgeRules,
       });
       setOps(next);
+      toast({ variant: "success", title: t("save"), description: "Pricing rules updated." });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Save failed");
+      const msg = e instanceof Error ? e.message : "Save failed";
+      setError(msg);
+      toast({ variant: "error", title: "Save failed", description: msg });
     }
   };
 

@@ -5,6 +5,7 @@ import { formatMoney, computeDriverEarnings, type CurrencyCode } from "@almosafa
 import type { Ride, Driver } from "@almosafar/shared";
 import { useAdminData } from "../../context/AdminDataContext";
 import { useAdminLocale } from "../../context/AdminLocaleContext";
+import { PageHeader } from "../../components/ui/PageHeader";
 
 export default function DashboardPage() {
   const { admin } = useAdminData();
@@ -40,10 +41,16 @@ export default function DashboardPage() {
     return { active: active.length, completed: completed.length, grossMinor, netMinor, currency, pending, online, byStatus };
   }, [rides, drivers]);
 
+  const statusLabels = ["Requested", "Accepted", "In progress", "Completed", "Cancelled"];
+
   return (
     <>
-      <h1>{t("nav.dashboard")}</h1>
-      <p className="muted">{t("demoDisclaimer")}</p>
+      <PageHeader title={t("nav.dashboard")} lead={t("demoDisclaimer")}>
+        <span className="live-pill">
+          <span className="live-pill-dot" />
+          {kpis.active} live
+        </span>
+      </PageHeader>
       <div className="kpi-grid">
         <div className="kpi">
           <div className="kpi-label">{t("kpis.activeRides")}</div>
@@ -75,15 +82,18 @@ export default function DashboardPage() {
         </div>
       </div>
       <section className="card">
-        <h2>Rides by status (demo chart)</h2>
-        <div className="bar-chart">
+        <h2>Rides by status</h2>
+        <div className="bar-chart bar-chart--labeled">
           {kpis.byStatus.map((n, i) => (
-            <div
-              key={i}
-              className="bar"
-              style={{ height: `${Math.max(8, n * 24)}px` }}
-              title={String(n)}
-            />
+            <div key={i} className="bar-col">
+              <div
+                className="bar"
+                style={{ height: `${Math.max(8, n * 24)}px` }}
+                title={`${statusLabels[i]}: ${n}`}
+              />
+              <span className="bar-label">{statusLabels[i]}</span>
+              <span className="bar-count">{n}</span>
+            </div>
           ))}
         </div>
       </section>
