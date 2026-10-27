@@ -1,0 +1,17 @@
+node_modules/
+Uber-Clone-ReactNative/
+dist/
+.next/
+.expo/
+web-build/
+*.local
+.env
+.env.development.local
+.env.production.local
+.turbo/
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+android/
+ios/

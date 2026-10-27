@@ -1,0 +1,27 @@
+{
+  "name": "@almosafar/admin",
+  "version": "0.1.0",
+  "private": true,
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@almosafar/shared": "*",
+    "@almosafar/ui": "*",
+    "next": "^15.1.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "@types/react": "~19.3.0",
+    "@types/react-dom": "~19.3.0",
+    "typescript": "^5.7.3"
+  }
+}

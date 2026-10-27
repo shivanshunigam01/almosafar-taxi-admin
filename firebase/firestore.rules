@@ -1,0 +1,122 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function role() {
+      return signedIn() ? request.auth.token.role : '';
+    }
+
+    function entityId() {
+      return signedIn() ? request.auth.token.entityId : '';
+    }
+
+    function isAdmin() {
+      return role() == 'admin';
+    }
+
+    function isPassenger() {
+      return role() == 'passenger';
+    }
+
+    function isDriver() {
+      return role() == 'driver';
+    }
+
+    // Public connectivity probe (no sensitive data).
+    match /_meta/health {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Auth profiles — written only by Admin SDK (seed / functions).
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create, update, delete: if false;
+    }
+
+    match /zones/{zoneId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /fareConfigurations/{configId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /passengers/{passengerId} {
+      allow read: if signedIn() && (isAdmin() || (isPassenger() && entityId() == passengerId));
+      allow write: if false;
+    }
+
+    match /drivers/{driverId} {
+      allow read: if signedIn() && (
+        isAdmin() ||
+        (isDriver() && entityId() == driverId) ||
+        resource.data.isOnline == true
+      );
+      allow write: if false;
+    }
+
+    match /vehicles/{vehicleId} {
+      allow read: if signedIn() && (
+        isAdmin() ||
+        (isDriver() && resource.data.driverId == entityId())
+      );
+      allow write: if false;
+    }
+
+    match /paymentMethods/{methodId} {
+      allow read: if signedIn() && (
+        isAdmin() ||
+        (isPassenger() && resource.data.passengerId == entityId())
+      );
+      allow write: if false;
+    }
+
+    match /payments/{paymentId} {
+      allow read: if signedIn() && (
+        isAdmin() ||
+        (isPassenger() && resource.data.passengerId == entityId()) ||
+        (isDriver() && resource.data.driverId == entityId())
+      );
+      allow write: if false;
+    }
+
+    match /activityLogs/{logId} {
+      allow read: if signedIn() && isAdmin();
+      allow write: if false;
+    }
+
+    match /operationalSettings/{docId} {
+      allow read: if signedIn() && isAdmin();
+      allow write: if false;
+    }
+
+    match /adminConfiguration/{docId} {
+      allow read: if signedIn() && isAdmin();
+      allow write: if false;
+    }
+
+    match /tripHistory/{entryId} {
+      allow read: if signedIn() && isAdmin();
+      allow write: if false;
+    }
+
+    match /rides/{rideId} {
+      allow read: if signedIn() && (
+        isAdmin() ||
+        (isPassenger() && resource.data.passengerId == entityId()) ||
+        (isDriver() && (
+          resource.data.driverId == entityId() ||
+          resource.data.status == 'requested'
+        ))
+      );
+      allow create, update, delete: if false;
+    }
+  }
+}

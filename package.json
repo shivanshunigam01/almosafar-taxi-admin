@@ -1,0 +1,31 @@
+{
+  "name": "almosafar-taxi",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Almosafar Taxi — passenger, driver, and admin demo monorepo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @almosafar/shared && npm run build -w @almosafar/ui",
+    "build:shared": "npm run build -w @almosafar/shared",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test -w @almosafar/shared",
+    "test:shared": "npm run test -w @almosafar/shared",
+    "passenger": "npm run start -w @almosafar/passenger",
+    "driver": "npm run start -w @almosafar/driver",
+    "admin": "npm run dev -w @almosafar/admin",
+    "firebase:seed": "npm run build:shared && npm run build --prefix firebase/functions && npm run seed --prefix firebase/functions",
+    "firebase:deploy": "npm run build --prefix firebase/functions && cd firebase && firebase deploy --only firestore:rules,firestore:indexes,functions",
+    "postinstall": "npm run build:shared"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "overrides": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-native": "0.88.0"
+  }
+}

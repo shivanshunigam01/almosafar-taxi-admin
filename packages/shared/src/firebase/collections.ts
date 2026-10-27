@@ -1,0 +1,16 @@
+export const COLLECTIONS = {
+  meta: "_meta",
+  health: "health",
+  users: "users",
+  zones: "zones",
+  fareConfigurations: "fareConfigurations",
+  passengers: "passengers",
+  drivers: "drivers",
+  vehicles: "vehicles",
+  rides: "rides",
+  paymentMethods: "paymentMethods",
+  payments: "payments",
+  activityLogs: "activityLogs",
+  operationalSettings: "operationalSettings",
+  adminConfiguration: "adminConfiguration",
+} as const;

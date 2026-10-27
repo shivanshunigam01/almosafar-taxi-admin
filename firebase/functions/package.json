@@ -1,0 +1,21 @@
+{
+  "name": "almosafar-firebase-functions",
+  "private": true,
+  "main": "lib/index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "seed": "node lib/seed-cli.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@almosafar/shared": "file:../../packages/shared",
+    "firebase-admin": "^13.0.2",
+    "firebase-functions": "^6.3.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

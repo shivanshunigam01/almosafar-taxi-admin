@@ -1,0 +1,3 @@
+# Upload scope is the monorepo root when building from this app. Do not ignore workspace packages.
+../../Uber-Clone-ReactNative
+../../firebase/functions/node_modules
